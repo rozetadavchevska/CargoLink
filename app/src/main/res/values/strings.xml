@@ -1,3 +1,18 @@
 <resources>
     <string name="app_name">CargoLink</string>
+
+    <string name="login">Login</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="noAccount">You don\'t have an account?</string>
+    <string name="registerNow">Register now</string>
+    <string name="register">Register</string>
+    <string name="sender">Sender</string>
+    <string name="driver">Driver</string>
+    <string name="userType">You will be:</string>
+
+    <string name="firstNameUser">First Name</string>
+    <string name="lastNameUser">Last Name</string>
+    <string name="emailUser">Email</string>
+    <string name="passwordUser">Password</string>
 </resources>
