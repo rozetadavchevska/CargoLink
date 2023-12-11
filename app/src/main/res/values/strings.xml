@@ -24,4 +24,8 @@
     <string name="changeEmail">Change email</string>
     <string name="changePassword">Change password</string>
 
+    <string name="hello">Hello</string>
+    <string name="recentOrders">Recent orders</string>
+    <string name="newOrder">New order</string>
+    <string name="ordersInProgress">Orders in progress</string>
 </resources>
