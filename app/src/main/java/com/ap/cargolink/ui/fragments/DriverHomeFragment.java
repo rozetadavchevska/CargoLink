@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -42,11 +43,12 @@ public class DriverHomeFragment extends Fragment {
 
         getUserName(currentUserId, userName);
 
+        FragmentManager fragmentManager = getParentFragmentManager();
         RecyclerView recentOrders = view.findViewById(R.id.recentOrders);
         recentOrdersList = new ArrayList<>();
 
         getRecentOrders();
-        adapter = new DriverHomeAdapter(recentOrdersList);
+        adapter = new DriverHomeAdapter(recentOrdersList, fragmentManager);
         recentOrders.setLayoutManager(new LinearLayoutManager(requireContext()));
         recentOrders.setAdapter(adapter);
 

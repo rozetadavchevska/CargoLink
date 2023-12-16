@@ -30,7 +30,7 @@
     <string name="ordersInProgress">Orders in progress</string>
     <string name="backBtn">Back</string>
     <string name="addNewOrder">Add New Order</string>
-    <string name="toReceiver">Receiver name</string>
+    <string name="toReceiver">Receiver</string>
     <string name="name">Name</string>
     <string name="description">Description</string>
     <string name="order">Order</string>
@@ -41,4 +41,7 @@
     <string name="orderWeight">Weight or your order (kg)</string>
     <string name="weight">Weight (kg)</string>
     <string name="makeAnOffer">Make an offer</string>
+
+    <string name="deliveryDate">Delivery date</string>
+    <string name="deliveryPrice">Delivery price</string>
 </resources>
