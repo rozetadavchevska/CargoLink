@@ -39,4 +39,6 @@
     <string name="senderPhone">Phone number of sender</string>
     <string name="receiverPhone">Phone number of receiver</string>
     <string name="orderWeight">Weight or your order (kg)</string>
+    <string name="weight">Weight (kg)</string>
+    <string name="makeAnOffer">Make an offer</string>
 </resources>
