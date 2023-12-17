@@ -81,6 +81,7 @@ public class NewOrderFragment extends Fragment {
         String orderId = ordersRef.push().getKey();
         String orderStatus = "Awaiting driver";
         Order newOrder = new Order();
+        newOrder.setOrderId(orderId);
         newOrder.setOrderReceiver(orderReceiverText);
         newOrder.setOrderName(orderNameText);
         newOrder.setOrderDescription(orderDescriptionText);

@@ -2,35 +2,48 @@ package com.ap.cargolink.ui.fragments;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ap.cargolink.R;
+import com.ap.cargolink.data.models.Offer;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class MakeAnOfferFragment extends Fragment {
     private String orderId;
-    private String orderName;
-    private String orderDescription;
-    private String orderFrom;
-    private String orderTo;
     private String orderSender;
-    private String orderStatus;
-    private String orderWeight;
+    private String senderFullName;
+    private String orderReceiver;
+    private String deliveryDate;
+    private String deliveryPrice;
+    EditText offerDate;
+    EditText offerPrice;
+    TextView senderName;
+    TextView receiverName;
+    Button makeAnOffer;
 
-    public static MakeAnOfferFragment newInstance(String orderItemId, String orderItemName, String orderItemDescription, String orderItemFrom,String orderItemTo, double orderItemWeight, String orderItemSender,String orderItemStatus) {
+    public static MakeAnOfferFragment newInstance(String orderItemId, String orderItemSender,String orderItemReceiver) {
         MakeAnOfferFragment fragment = new MakeAnOfferFragment();
         Bundle args = new Bundle();
         args.putString("orderId", orderItemId);
-        args.putString("orderName", orderItemName);
-        args.putString("orderDescription", orderItemDescription);
-        args.putString("orderFrom", orderItemFrom);
-        args.putString("orderTo", orderItemTo);
-        args.putString("orderWeight", String.valueOf(orderItemWeight));
         args.putString("orderSender", orderItemSender);
-        args.putString("orderStatus", orderItemStatus);
+        args.putString("orderReceiver", orderItemReceiver);
         fragment.setArguments(args);
         return fragment;
     }
@@ -40,19 +53,83 @@ public class MakeAnOfferFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_make_an_offer, container, false);
 
+        ImageButton back = view.findViewById(R.id.makeOfferBack);
+        back.setOnClickListener(v -> {
+            FragmentManager fragmentManager = getParentFragmentManager();
+            fragmentManager.popBackStack();
+        });
+
         Bundle args = getArguments();
         if (args != null) {
             orderId = args.getString("orderId");
-            orderName = args.getString("orderName");
-            orderDescription = args.getString("orderDescription");
-            orderFrom = args.getString("orderFrom");
-            orderTo = args.getString("orderTo");
-            orderWeight = args.getString("orderWeight");
             orderSender = args.getString("orderSender");
-            orderStatus = args.getString("orderStatus");
+            orderReceiver = args.getString("orderReceiver");
         }
 
+        offerDate = view.findViewById(R.id.deliveryDateInput);
+        offerPrice = view.findViewById(R.id.deliveryPriceInput);
+        makeAnOffer = view.findViewById(R.id.makeAnOfferBtn);
+
+        getSenderName();
+        senderName = view.findViewById(R.id.senderName);
+        receiverName = view.findViewById(R.id.receiverName);
+        receiverName.setText(orderReceiver);
+
+        makeAnOffer.setOnClickListener(v -> addOffer());
 
         return view;
+    }
+
+    private void addOffer(){
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        FirebaseUser currentUser = auth.getCurrentUser();
+        String currentUserId = currentUser.getUid();
+
+        deliveryDate = offerDate.getText().toString();
+        deliveryPrice = offerPrice.getText().toString();
+
+        DatabaseReference offersRef = FirebaseDatabase.getInstance().getReference("offers");
+        String offerId = offersRef.push().getKey();
+        Offer newOffer = new Offer();
+        newOffer.setOfferId(offerId);
+        newOffer.setOrderId(orderId);
+        newOffer.setSenderId(orderSender);
+        newOffer.setReceiver(orderReceiver);
+        newOffer.setDriverId(currentUserId);
+        newOffer.setDeliveryDate(deliveryDate);
+        newOffer.setDeliveryPrice(deliveryPrice);
+
+        offersRef.child(offerId).setValue(newOffer)
+                .addOnSuccessListener(v -> {
+                    Toast.makeText(getContext(),"Successfully added offer", Toast.LENGTH_SHORT).show();
+                    updateOrderWithOffer(offerId, orderId);
+                    makeAnOffer.setText("Offer made");
+                    makeAnOffer.setEnabled(false);
+                })
+                .addOnFailureListener(v -> {
+                    Toast.makeText(getContext(),"Problem adding order", Toast.LENGTH_SHORT).show();
+                });
+    }
+
+    private void updateOrderWithOffer(String newOfferId, String newOrderId) {
+        DatabaseReference ordersRef = FirebaseDatabase.getInstance().getReference("orders").child(newOrderId);
+        ordersRef.child("offersIds").child(newOfferId).setValue(true);
+    }
+
+    private void getSenderName(){
+        DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("users").child(orderSender);
+        usersRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.exists()){
+                    String firstName = snapshot.child("firstName").getValue(String.class);
+                    String lastName = snapshot.child("lastName").getValue(String.class);
+                    senderFullName = firstName + " " + lastName;
+                    senderName.setText(senderFullName);
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {}
+        });
     }
 }

@@ -26,8 +26,10 @@ public class DriverHomeAdapter extends RecyclerView.Adapter<DriverHomeAdapter.Vi
     private String orderItemSender;
     private String orderItemStatus;
     private double orderItemWeight;
+    private String orderReceiver;
     private List<Order> recentOrdersList;
     private FragmentManager fragmentManager;
+    private boolean isOfferMade = false;
     public DriverHomeAdapter(List<Order> recentOrdersList, FragmentManager fragmentManager){
         this.recentOrdersList = recentOrdersList;
         this.fragmentManager = fragmentManager;
@@ -51,6 +53,7 @@ public class DriverHomeAdapter extends RecyclerView.Adapter<DriverHomeAdapter.Vi
         orderItemSender = orderItem.getSenderId();
         orderItemStatus = orderItem.getOrderStatus();
         orderItemWeight = orderItem.getOrderWeight();
+        orderReceiver = orderItem.getOrderReceiver();
 
         if(orderItemName != null){
             holder.orderName.setText(orderItemName);
@@ -75,7 +78,7 @@ public class DriverHomeAdapter extends RecyclerView.Adapter<DriverHomeAdapter.Vi
 
     private void makeAnOffer(){
         if(fragmentManager != null){
-            MakeAnOfferFragment makeAnOfferFragment = MakeAnOfferFragment.newInstance(orderItemId,orderItemName,orderItemDescription,orderItemFrom,orderItemTo,orderItemWeight,orderItemSender,orderItemStatus);
+            MakeAnOfferFragment makeAnOfferFragment = MakeAnOfferFragment.newInstance(orderItemId, orderItemSender,orderReceiver);
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             fragmentTransaction.replace(R.id.driverFrameLayout, makeAnOfferFragment);
             fragmentTransaction.addToBackStack(null);

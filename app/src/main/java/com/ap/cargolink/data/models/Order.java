@@ -1,5 +1,7 @@
 package com.ap.cargolink.data.models;
 
+import java.util.Map;
+
 public class Order {
     private String orderId;
     private String orderReceiver;
@@ -13,10 +15,11 @@ public class Order {
     private String senderId;
     private String driverId;
     private String orderStatus;
+    private Map<String, Boolean> offersIds;
 
     public Order(){}
 
-    public Order(String orderId, String orderReceiver, String orderName, String orderDescription, String addressFrom, String addressTo, String senderNumber, String receiverNumber, double orderWeight, String senderId, String driverId, String orderStatus) {
+    public Order(String orderId, String orderReceiver, String orderName, String orderDescription, String addressFrom, String addressTo, String senderNumber, String receiverNumber, double orderWeight, String senderId, String driverId, String orderStatus, Map<String, Boolean> offersIds) {
         this.orderId = orderId;
         this.orderReceiver = orderReceiver;
         this.orderName = orderName;
@@ -29,6 +32,7 @@ public class Order {
         this.senderId = senderId;
         this.driverId = driverId;
         this.orderStatus = orderStatus;
+        this.offersIds = offersIds;
     }
 
     public String getOrderId() {
@@ -125,5 +129,13 @@ public class Order {
 
     public void setOrderStatus(String orderStatus) {
         this.orderStatus = orderStatus;
+    }
+
+    public Map<String, Boolean> getOffersIds() {
+        return offersIds;
+    }
+
+    public void setOffersIds(Map<String, Boolean> offersIds) {
+        this.offersIds = offersIds;
     }
 }
