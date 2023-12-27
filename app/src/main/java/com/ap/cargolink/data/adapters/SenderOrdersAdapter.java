@@ -6,13 +6,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ap.cargolink.R;
 import com.ap.cargolink.data.models.Order;
+import com.ap.cargolink.ui.fragments.ViewOffersFragment;
 
 import java.util.List;
 
@@ -51,6 +54,18 @@ public class SenderOrdersAdapter extends RecyclerView.Adapter<SenderOrdersAdapte
         holder.orderFromAddressText.setText(addressFromOrder);
         holder.orderToAddressText.setText(addressToOrder);
         holder.orderStatusText.setText(orderStatus);
+
+        holder.viewOffersBtn.setOnClickListener(v -> {
+            if (fragmentManager != null) {
+                ViewOffersFragment viewOffersFragment = ViewOffersFragment.newInstance(orderItem.getOrderId(), orderItem.getOffersIds());
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.senderFrameLayout, viewOffersFragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+            }  else {
+                Toast.makeText(v.getContext(), "No offers at the moment", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override
