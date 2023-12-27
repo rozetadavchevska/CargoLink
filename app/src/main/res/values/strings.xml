@@ -41,6 +41,8 @@
     <string name="orderWeight">Weight or your order (kg)</string>
     <string name="weight">Weight (kg)</string>
     <string name="makeAnOffer">Make an offer</string>
+    <string name="viewOffers">View offers</string>
+    <string name="orderStatus">Status</string>
 
     <string name="deliveryDate">Delivery date</string>
     <string name="deliveryPrice">Delivery price</string>
