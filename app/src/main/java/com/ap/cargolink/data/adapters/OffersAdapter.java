@@ -22,6 +22,7 @@ public class OffersAdapter extends RecyclerView.Adapter<OffersAdapter.ViewHolder
     private List<String> offersList;
     private String senderOrder;
     private String driverFullName;
+    private String driverId;
     public OffersAdapter(List<String> offersList, String senderOrder){
         this.offersList = offersList;
         this.senderOrder = senderOrder;
@@ -69,6 +70,7 @@ public class OffersAdapter extends RecyclerView.Adapter<OffersAdapter.ViewHolder
         updateNotAcceptedOffers(position);
         updateOfferStatus(offerId, "Accepted");
         updateOrderStatus("Awaiting order");
+        updateDriverOrders(driverId, senderOrder);
     }
 
 
@@ -91,13 +93,18 @@ public class OffersAdapter extends RecyclerView.Adapter<OffersAdapter.ViewHolder
         orderRef.child("orderStatus").setValue(status);
     }
 
+    private void updateDriverOrders(String driversId, String orderId) {
+        DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("users").child(driversId);
+        usersRef.child("ordersId").child(orderId).setValue(true);
+    }
+
     private void getOfferDetails(String offerId, ViewHolder holder) {
         DatabaseReference offersRef = FirebaseDatabase.getInstance().getReference("offers").child(offerId);
         offersRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(snapshot.exists()){
-                    String driverId = snapshot.child("driverId").getValue(String.class);
+                    driverId = snapshot.child("driverId").getValue(String.class);
                     String deliveryDate = snapshot.child("deliveryDate").getValue(String.class);
                     String deliveryPrice = snapshot.child("deliveryPrice").getValue(String.class);
 
