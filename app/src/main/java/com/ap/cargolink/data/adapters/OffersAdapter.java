@@ -3,6 +3,7 @@ package com.ap.cargolink.data.adapters;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -38,6 +39,56 @@ public class OffersAdapter extends RecyclerView.Adapter<OffersAdapter.ViewHolder
         String offer = offersList.get(position);
 
         getOfferDetails(offer, holder);
+
+        DatabaseReference offerRef = FirebaseDatabase.getInstance().getReference("offers").child(offer);
+        offerRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    String offerStatus = snapshot.child("offerStatus").getValue(String.class);
+
+                    if ("Accepted".equals(offerStatus)) {
+                        holder.acceptOfferBtn.setText("Accepted Offer");
+                        holder.acceptOfferBtn.setClickable(false);
+                    } else if ("Not Accepted".equals(offerStatus)) {
+                        holder.acceptOfferBtn.setText("Not accepted");
+                        holder.acceptOfferBtn.setClickable(false);
+                    } else {
+                        holder.acceptOfferBtn.setText("Accept Offer");
+                        holder.acceptOfferBtn.setClickable(true);
+                        holder.acceptOfferBtn.setOnClickListener(view -> acceptOffer(offer, holder.getAdapterPosition()));
+                    }
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {}
+        });
+    }
+
+    private void acceptOffer(String offerId, int position) {
+        updateNotAcceptedOffers(position);
+        updateOfferStatus(offerId, "Accepted");
+        updateOrderStatus("Awaiting order");
+    }
+
+
+    private void updateNotAcceptedOffers(int clickedPosition) {
+        for (int i = 0; i < offersList.size(); i++) {
+            if (i != clickedPosition) {
+                String notAcceptedOfferId = offersList.get(i);
+                updateOfferStatus(notAcceptedOfferId, "Not Accepted");
+            }
+        }
+    }
+
+    private void updateOfferStatus(String offerId, String status) {
+        DatabaseReference offersRef = FirebaseDatabase.getInstance().getReference("offers").child(offerId);
+        offersRef.child("offerStatus").setValue(status);
+    }
+
+    private void updateOrderStatus(String status) {
+        DatabaseReference orderRef = FirebaseDatabase.getInstance().getReference("orders").child(senderOrder);
+        orderRef.child("orderStatus").setValue(status);
     }
 
     private void getOfferDetails(String offerId, ViewHolder holder) {
@@ -86,12 +137,14 @@ public class OffersAdapter extends RecyclerView.Adapter<OffersAdapter.ViewHolder
 
     public class ViewHolder extends RecyclerView.ViewHolder{
         TextView driverNameText, deliveryDateText, deliveryPriceText;
+        Button acceptOfferBtn;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
             driverNameText = itemView.findViewById(R.id.driverNameText);
             deliveryDateText = itemView.findViewById(R.id.deliveryDateText);
             deliveryPriceText = itemView.findViewById(R.id.deliveryPriceText);
+            acceptOfferBtn = itemView.findViewById(R.id.acceptOfferBtn);
         }
     }
 }
