@@ -61,7 +61,7 @@ public class ViewOffersFragment extends Fragment {
         }
 
         RecyclerView studentsAttending = view.findViewById(R.id.viewOffers);
-        adapter = new OffersAdapter(offersList, orderId);
+        adapter = new OffersAdapter(offersList, orderId, getContext());
         studentsAttending.setLayoutManager(new LinearLayoutManager(requireContext()));
         studentsAttending.setAdapter(adapter);
 

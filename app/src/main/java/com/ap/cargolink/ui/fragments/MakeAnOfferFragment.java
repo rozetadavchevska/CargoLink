@@ -1,5 +1,7 @@
 package com.ap.cargolink.ui.fragments;
 
+import static com.ap.cargolink.utils.NotificationReceiver.fetchUserTypeFromFirebase;
+
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -17,6 +19,9 @@ import android.widget.Toast;
 
 import com.ap.cargolink.R;
 import com.ap.cargolink.data.models.Offer;
+import com.ap.cargolink.ui.activities.DriverActivity;
+import com.ap.cargolink.ui.activities.SenderActivity;
+import com.ap.cargolink.utils.NotificationHelper;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -105,10 +110,13 @@ public class MakeAnOfferFragment extends Fragment {
                     updateOrderWithOffer(offerId, orderId);
                     makeAnOffer.setText("Offer made");
                     makeAnOffer.setEnabled(false);
+
                 })
                 .addOnFailureListener(v -> {
                     Toast.makeText(getContext(),"Problem adding order", Toast.LENGTH_SHORT).show();
                 });
+
+        scheduleNotificationForNewOffer();
     }
 
     private void updateOrderWithOffer(String newOfferId, String newOrderId) {
@@ -131,5 +139,12 @@ public class MakeAnOfferFragment extends Fragment {
             @Override
             public void onCancelled(@NonNull DatabaseError error) {}
         });
+    }
+
+    private void scheduleNotificationForNewOffer() {
+//        fetchUserTypeFromFirebase(getContext(), userType -> {
+//            Class<?> targetActivity = userType.equals("Driver") ? SenderActivity.class : DriverActivity.class;
+            NotificationHelper.showNotification(getContext(),  "New Offer Added", "A new offer has been added to your order!", SenderActivity.class);
+//        });
     }
 }

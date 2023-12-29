@@ -39,8 +39,8 @@ public class DriverOrdersFragment extends Fragment {
         ordersList = new ArrayList<>();
         getOrders();
 
-        adapter = new DriverOrdersAdapter(ordersList, fragmentManager);
-        orders.setLayoutManager(new LinearLayoutManager(requireContext()));
+        adapter = new DriverOrdersAdapter(ordersList, fragmentManager, requireContext());
+        orders.setLayoutManager(new LinearLayoutManager(getContext()));
         orders.setAdapter(adapter);
 
         return view;

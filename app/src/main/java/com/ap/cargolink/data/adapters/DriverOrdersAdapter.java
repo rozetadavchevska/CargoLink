@@ -1,5 +1,8 @@
 package com.ap.cargolink.data.adapters;
 
+import static com.ap.cargolink.utils.NotificationReceiver.fetchUserTypeFromFirebase;
+
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +14,9 @@ import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ap.cargolink.R;
+import com.ap.cargolink.ui.activities.DriverActivity;
+import com.ap.cargolink.ui.activities.SenderActivity;
+import com.ap.cargolink.utils.NotificationHelper;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -22,10 +28,12 @@ import java.util.List;
 public class DriverOrdersAdapter extends RecyclerView.Adapter<DriverOrdersAdapter.ViewHolder> {
     private List<String> ordersList;
     private FragmentManager fragmentManager;
+    private Context context;
 
-    public DriverOrdersAdapter(List<String> ordersList, FragmentManager fragmentManager){
+    public DriverOrdersAdapter(List<String> ordersList, FragmentManager fragmentManager, Context context){
         this.ordersList = ordersList;
         this.fragmentManager = fragmentManager;
+        this.context = context;
     }
 
     @NonNull
@@ -49,7 +57,11 @@ public class DriverOrdersAdapter extends RecyclerView.Adapter<DriverOrdersAdapte
     private void confirmDelivered(String orderId, String status) {
         DatabaseReference ordersRef = FirebaseDatabase.getInstance().getReference("orders").child(orderId);
         ordersRef.child("orderStatus").setValue(status);
-        notifyDataSetChanged();
+
+//        fetchUserTypeFromFirebase(context, userType -> {
+//            Class<?> targetActivity = userType.equals("Driver") ? SenderActivity.class : DriverActivity.class;
+            NotificationHelper.showNotification(context, "Order Confirmed", "Your order has been delivered!", SenderActivity.class);
+//        });
     }
 
     private void checkOrderConfirmationStatus(String orderId, ViewHolder holder) {
@@ -63,14 +75,16 @@ public class DriverOrdersAdapter extends RecyclerView.Adapter<DriverOrdersAdapte
                     if ("Delivered".equals(orderStatus)) {
                         holder.confirmDeliveredBtn.setText("Confirmed");
                         holder.confirmDeliveredBtn.setEnabled(false);
-                        notifyDataSetChanged();
+                    } else {
+                        holder.confirmDeliveredBtn.setText("Confirm Delivered");
+                        holder.confirmDeliveredBtn.setEnabled(true);
+                        holder.confirmDeliveredBtn.setOnClickListener(v -> confirmDelivered(orderId, "Delivered"));
                     }
                 }
+                notifyDataSetChanged();
             }
-
             @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-            }
+            public void onCancelled(@NonNull DatabaseError error) {}
         });
     }
 
