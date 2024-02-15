@@ -116,6 +116,15 @@
                 android:autofillHints="phone number"
                 android:hint="@string/orderWeight"/>
 
+            <EditText
+                android:id="@+id/orderPrice"
+                android:layout_width="match_parent"
+                android:layout_height="50sp"
+                android:layout_margin="16sp"
+                android:autofillHints="number"
+                android:hint="@string/orderPrice"
+                android:inputType="numberDecimal" />
+
             <Button
                 android:id="@+id/addOrderBtn"
                 android:layout_width="200dp"

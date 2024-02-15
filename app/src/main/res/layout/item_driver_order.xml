@@ -175,6 +175,95 @@
 
         </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/orderPrice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/ordersPrice"
+                android:textColor="@color/red"
+                android:textSize="14sp"
+                android:layout_margin="5sp"/>
+
+            <TextView
+                android:id="@+id/orderPriceText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textColor="@color/red"
+                android:textSize="14sp"
+                android:layout_margin="5sp"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/deliveryPrice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/deliveryPrice"
+                android:textColor="@color/red"
+                android:textSize="14sp"
+                android:layout_margin="5sp"/>
+
+            <TextView
+                android:id="@+id/deliveryPriceText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textColor="@color/red"
+                android:textSize="14sp"
+                android:layout_margin="5sp"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/totalPrice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/totalPrice"
+                android:textColor="@color/red"
+                android:textSize="14sp"
+                android:layout_margin="5sp"/>
+
+            <TextView
+                android:id="@+id/totalPriceText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textColor="@color/red"
+                android:textSize="14sp"
+                android:layout_margin="5sp"/>
+
+        </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end">
+
+        <Button
+            android:id="@+id/callReceiver"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/callReceiver"
+            android:backgroundTint="@color/green"
+            android:textColor="@color/white"
+            android:layout_gravity="end"
+            android:textStyle="bold"
+            android:layout_marginBottom="5sp"
+            android:layout_marginRight="5sp"/>
+
         <Button
             android:id="@+id/confirmDeliveredBtn"
             android:layout_width="wrap_content"
@@ -184,7 +273,10 @@
             android:textColor="@color/white"
             android:layout_gravity="end"
             android:textStyle="bold"
-            android:layout_marginBottom="5sp" />
+            android:layout_marginBottom="5sp"
+            android:layout_marginLeft="5sp"/>
+
+    </LinearLayout>
 
     </LinearLayout>
 

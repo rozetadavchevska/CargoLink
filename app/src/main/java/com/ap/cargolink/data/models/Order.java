@@ -12,6 +12,7 @@ public class Order {
     private String senderNumber;
     private String receiverNumber;
     private double orderWeight;
+    private String orderPrice;
     private String senderId;
     private String driverId;
     private String orderStatus;
@@ -19,7 +20,7 @@ public class Order {
 
     public Order(){}
 
-    public Order(String orderId, String orderReceiver, String orderName, String orderDescription, String addressFrom, String addressTo, String senderNumber, String receiverNumber, double orderWeight, String senderId, String driverId, String orderStatus, Map<String, Boolean> offersIds) {
+    public Order(String orderId, String orderReceiver, String orderName, String orderDescription, String addressFrom, String addressTo, String senderNumber, String receiverNumber, double orderWeight,String orderPrice, String senderId, String driverId, String orderStatus, Map<String, Boolean> offersIds) {
         this.orderId = orderId;
         this.orderReceiver = orderReceiver;
         this.orderName = orderName;
@@ -29,6 +30,7 @@ public class Order {
         this.senderNumber = senderNumber;
         this.receiverNumber = receiverNumber;
         this.orderWeight = orderWeight;
+        this.orderPrice = orderPrice;
         this.senderId = senderId;
         this.driverId = driverId;
         this.orderStatus = orderStatus;
@@ -137,5 +139,13 @@ public class Order {
 
     public void setOffersIds(Map<String, Boolean> offersIds) {
         this.offersIds = offersIds;
+    }
+
+    public String getOrderPrice() {
+        return orderPrice;
+    }
+
+    public void setOrderPrice(String orderPrice) {
+        this.orderPrice = orderPrice;
     }
 }

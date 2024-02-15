@@ -1,8 +1,8 @@
 package com.ap.cargolink.data.adapters;
 
-import static com.ap.cargolink.utils.NotificationReceiver.fetchUserTypeFromFirebase;
-
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +14,6 @@ import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ap.cargolink.R;
-import com.ap.cargolink.ui.activities.DriverActivity;
 import com.ap.cargolink.ui.activities.SenderActivity;
 import com.ap.cargolink.utils.NotificationHelper;
 import com.google.firebase.database.DataSnapshot;
@@ -48,6 +47,7 @@ public class DriverOrdersAdapter extends RecyclerView.Adapter<DriverOrdersAdapte
         String orderId = ordersList.get(position);
 
         getOrderDetails(orderId, holder);
+        getPrices(orderId, holder);
 
         checkOrderConfirmationStatus(orderId, holder);
 
@@ -117,14 +117,58 @@ public class DriverOrdersAdapter extends RecyclerView.Adapter<DriverOrdersAdapte
         });
     }
 
+    private void getPrices(String orderId, ViewHolder holder) {
+        DatabaseReference ordersRef = FirebaseDatabase.getInstance().getReference("orders").child(orderId);
+        ordersRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.exists()){
+                    String orderPriceStr = snapshot.child("orderPrice").getValue(String.class);
+                    long orderPrice = Long.parseLong(orderPriceStr);
+
+                    String offerId = null;
+                    DataSnapshot offersIdsSnapshot = snapshot.child("offersIds");
+                    for (DataSnapshot offerSnapshot : offersIdsSnapshot.getChildren()) {
+                        offerId = offerSnapshot.getKey();
+                        break;
+                    }
+
+                    if (offerId != null) {
+                        DatabaseReference offerRef = FirebaseDatabase.getInstance().getReference("offers").child(offerId);
+                        offerRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                if(snapshot.exists()){
+                                    String deliveryPriceStr = snapshot.child("deliveryPrice").getValue(String.class);
+                                    long deliveryPrice = Long.parseLong(deliveryPriceStr);
+
+                                    long totalPrice = orderPrice + deliveryPrice;
+
+                                    holder.totalPriceTextView.setText(String.valueOf(totalPrice));
+                                    holder.orderPriceTextView.setText(String.valueOf(orderPrice));
+                                    holder.deliveryPriceTextView.setText(String.valueOf(deliveryPrice));
+                                }
+                            }
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {}
+                        });
+                    }
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {}
+        });
+    }
+
     @Override
     public int getItemCount() {
         return ordersList.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView orderName, orderDescriptionText, orderFromAddressText, orderToAddressText, orderWeightText, orderReceiverText, orderPhoneText;
-        Button confirmDeliveredBtn;
+        TextView orderName, orderDescriptionText, orderFromAddressText, orderToAddressText, orderWeightText,
+                orderReceiverText, orderPhoneText, totalPriceTextView, orderPriceTextView, deliveryPriceTextView;
+        Button confirmDeliveredBtn,  callReceiverBtn;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
@@ -136,6 +180,18 @@ public class DriverOrdersAdapter extends RecyclerView.Adapter<DriverOrdersAdapte
             orderReceiverText = itemView.findViewById(R.id.orderReceiverText);
             orderPhoneText = itemView.findViewById(R.id.orderPhoneText);
             confirmDeliveredBtn = itemView.findViewById(R.id.confirmDeliveredBtn);
+            callReceiverBtn = itemView.findViewById(R.id.callReceiver);
+            orderPriceTextView = itemView.findViewById(R.id.orderPriceText);
+            deliveryPriceTextView = itemView.findViewById(R.id.deliveryPriceText);
+            totalPriceTextView = itemView.findViewById(R.id.totalPriceText);
+
+            callReceiverBtn.setOnClickListener(v -> {
+                String phoneNumber = orderPhoneText.getText().toString();
+
+                Intent intent = new Intent(Intent.ACTION_DIAL);
+                intent.setData(Uri.parse("tel:" + phoneNumber));
+                context.startActivity(intent);
+            });
         }
     }
 }

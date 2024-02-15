@@ -29,6 +29,7 @@ public class NewOrderFragment extends Fragment {
     EditText senderNumber;
     EditText receiverNumber;
     EditText orderWeight;
+    EditText orderPrice;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -49,6 +50,7 @@ public class NewOrderFragment extends Fragment {
         senderNumber = view.findViewById(R.id.senderPhone);
         receiverNumber = view.findViewById(R.id.receiverPhone);
         orderWeight = view.findViewById(R.id.orderWeight);
+        orderPrice = view.findViewById(R.id.orderPrice);
 
         Button addOrder = view.findViewById(R.id.addOrderBtn);
         addOrder.setOnClickListener(v -> addNewOrder());
@@ -66,6 +68,7 @@ public class NewOrderFragment extends Fragment {
         String receiverNumberText = receiverNumber.getText().toString();
         String orderWeightText = orderWeight.getText().toString();
         double orderWeightInput = Double.parseDouble(orderWeightText);
+        String orderPriceText = orderPrice.getText().toString();
 
         if(orderReceiverText.isEmpty()||orderNameText.isEmpty()||orderDescriptionText.isEmpty()||addressFromText.isEmpty()||
         addressToText.isEmpty()||senderNumberText.isEmpty()||receiverNumberText.isEmpty()||orderWeightText.isEmpty()){
@@ -90,6 +93,7 @@ public class NewOrderFragment extends Fragment {
         newOrder.setSenderNumber(senderNumberText);
         newOrder.setReceiverNumber(receiverNumberText);
         newOrder.setOrderWeight(orderWeightInput);
+        newOrder.setOrderPrice(orderPriceText);
         newOrder.setSenderId(currentUserId);
         newOrder.setOrderStatus(orderStatus);
         if(orderId != null){
