@@ -43,11 +43,15 @@ public class SenderHomeAdapter extends RecyclerView.Adapter<SenderHomeAdapter.Vi
         addressToOrder = orderItem.getAddressTo();
         orderStatus = orderItem.getOrderStatus();
 
-        holder.orderName.setText(nameOrder);
-        holder.orderDescriptionText.setText(descriptionOrder);
-        holder.orderFromAddressText.setText(addressFromOrder);
-        holder.orderToAddressText.setText(addressToOrder);
-        holder.orderStatusText.setText(orderStatus);
+        if (!"Delivered".equals(orderStatus)) {
+            holder.orderName.setText(nameOrder);
+            holder.orderDescriptionText.setText(descriptionOrder);
+            holder.orderFromAddressText.setText(addressFromOrder);
+            holder.orderToAddressText.setText(addressToOrder);
+            holder.orderStatusText.setText(orderStatus);
+        } else {
+            holder.itemView.setVisibility(View.GONE);
+            }
     }
 
     @Override
