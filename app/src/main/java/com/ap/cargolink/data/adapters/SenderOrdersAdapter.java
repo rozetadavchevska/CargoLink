@@ -75,7 +75,7 @@ public class SenderOrdersAdapter extends RecyclerView.Adapter<SenderOrdersAdapte
 
     public class ViewHolder extends RecyclerView.ViewHolder{
         TextView orderName, orderDescriptionText, orderFromAddressText, orderToAddressText, orderStatusText;
-        Button viewOffersBtn;
+        Button viewOffersBtn, reviewBtn;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
@@ -85,6 +85,7 @@ public class SenderOrdersAdapter extends RecyclerView.Adapter<SenderOrdersAdapte
             orderToAddressText = itemView.findViewById(R.id.orderToAddressText);
             orderStatusText = itemView.findViewById(R.id.orderStatusText);
             viewOffersBtn = itemView.findViewById(R.id.viewOffersBtn);
+            reviewBtn = itemView.findViewById(R.id.reviewBtn);
         }
     }
 }

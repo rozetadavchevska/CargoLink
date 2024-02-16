@@ -257,7 +257,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/callReceiver"
-            android:backgroundTint="@color/green"
+            android:backgroundTint="@color/blue"
             android:textColor="@color/white"
             android:layout_gravity="end"
             android:textStyle="bold"

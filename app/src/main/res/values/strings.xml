@@ -49,6 +49,7 @@
     <string name="acceptOffer">Accept offer</string>
     <string name="confirmDelivered">Confirm delivered</string>
     <string name="callReceiver">Call Receiver</string>
+    <string name="review">Leave a review</string>
 
     <string name="deliveryDate">Delivery date</string>
     <string name="deliveryPrice">Delivery price</string>

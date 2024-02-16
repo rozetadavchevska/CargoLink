@@ -51,7 +51,7 @@ public class SenderHomeAdapter extends RecyclerView.Adapter<SenderHomeAdapter.Vi
             holder.orderStatusText.setText(orderStatus);
         } else {
             holder.itemView.setVisibility(View.GONE);
-            }
+        }
     }
 
     @Override

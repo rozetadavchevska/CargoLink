@@ -127,16 +127,36 @@
 
         </LinearLayout>
 
-        <Button
-            android:id="@+id/viewOffersBtn"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/viewOffers"
-            android:backgroundTint="@color/red"
-            android:textColor="@color/white"
-            android:layout_gravity="end"
-            android:textStyle="bold"
-            android:layout_marginBottom="5sp" />
+            android:layout_gravity="end">
+
+            <Button
+                android:id="@+id/reviewBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/review"
+                android:backgroundTint="@color/blue"
+                android:textColor="@color/white"
+                android:layout_gravity="end"
+                android:textStyle="bold"
+                android:layout_marginBottom="5sp"
+                android:layout_marginRight="5sp"/>
+
+            <Button
+                android:id="@+id/viewOffersBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/viewOffers"
+                android:backgroundTint="@color/red"
+                android:textColor="@color/white"
+                android:layout_gravity="end"
+                android:textStyle="bold"
+                android:layout_marginBottom="5sp"
+                android:layout_marginLeft="5sp"/>
+
+        </LinearLayout>
 
     </LinearLayout>
 
