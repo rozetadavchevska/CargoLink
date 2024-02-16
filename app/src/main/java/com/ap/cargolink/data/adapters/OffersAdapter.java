@@ -1,7 +1,5 @@
 package com.ap.cargolink.data.adapters;
 
-import static com.ap.cargolink.utils.NotificationReceiver.fetchUserTypeFromFirebase;
-
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,7 +12,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.ap.cargolink.R;
 import com.ap.cargolink.ui.activities.DriverActivity;
-import com.ap.cargolink.ui.activities.SenderActivity;
 import com.ap.cargolink.utils.NotificationHelper;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -80,10 +77,7 @@ public class OffersAdapter extends RecyclerView.Adapter<OffersAdapter.ViewHolder
         updateOrderStatus("Awaiting order");
         updateDriverOrders(driverId, senderOrder);
 
-//        fetchUserTypeFromFirebase(context, userType -> {
-//            Class<?> targetActivity = userType.equals("Driver") ? SenderActivity.class : DriverActivity.class;
-            NotificationHelper.showNotification(context, "Offer Accepted", "Your offer has been accepted!", DriverActivity.class);
-//        });
+        NotificationHelper.showNotificationToUser(context, "Offer Accepted", "Your offer has been accepted!", driverId, DriverActivity.class);
     }
 
 

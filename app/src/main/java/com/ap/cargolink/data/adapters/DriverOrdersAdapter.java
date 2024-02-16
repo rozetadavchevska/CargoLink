@@ -58,10 +58,22 @@ public class DriverOrdersAdapter extends RecyclerView.Adapter<DriverOrdersAdapte
         DatabaseReference ordersRef = FirebaseDatabase.getInstance().getReference("orders").child(orderId);
         ordersRef.child("orderStatus").setValue(status);
 
-//        fetchUserTypeFromFirebase(context, userType -> {
-//            Class<?> targetActivity = userType.equals("Driver") ? SenderActivity.class : DriverActivity.class;
-            NotificationHelper.showNotification(context, "Order Confirmed", "Your order has been delivered!", SenderActivity.class);
-//        });
+        ordersRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    String senderId = snapshot.child("senderId").getValue(String.class);
+                    if (senderId != null) {
+                        NotificationHelper.showNotificationToUser(context, "Order Confirmed", "Your order has been delivered!", senderId, SenderActivity.class);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                // Handle onCancelled
+            }
+        });
     }
 
     private void checkOrderConfirmationStatus(String orderId, ViewHolder holder) {

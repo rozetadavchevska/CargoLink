@@ -18,19 +18,20 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 public class NotificationReceiver extends BroadcastReceiver {
+
     @Override
     public void onReceive(Context context, Intent intent) {
         String title = intent.getStringExtra("title");
         String message = intent.getStringExtra("message");
         String targetActivityName = intent.getStringExtra("target_activity");
 
-        fetchUserTypeFromFirebase(context, (userType) -> {
+        fetchUserTypeFromFirebase(context, userType -> {
             try {
                 Class<?> targetActivity = Class.forName(targetActivityName);
 
-                if (TextUtils.equals(userType, "sender") && targetActivity == DriverActivity.class) {
+                if (TextUtils.equals(userType, "Sender") && targetActivity == DriverActivity.class) {
                     NotificationHelper.showNotification(context, title, message, targetActivity);
-                } else if (TextUtils.equals(userType, "driver") && targetActivity == SenderActivity.class) {
+                } else if (TextUtils.equals(userType, "Driver") && targetActivity == SenderActivity.class) {
                     NotificationHelper.showNotification(context, title, message, targetActivity);
                 }
 
@@ -62,7 +63,9 @@ public class NotificationReceiver extends BroadcastReceiver {
                     }
                 }
                 @Override
-                public void onCancelled(@NonNull DatabaseError error) {}
+                public void onCancelled(@NonNull DatabaseError error) {
+                    // Handle onCancelled event
+                }
             });
         }
     }
