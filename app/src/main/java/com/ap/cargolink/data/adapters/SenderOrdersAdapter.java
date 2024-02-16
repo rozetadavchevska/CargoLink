@@ -1,6 +1,7 @@
 package com.ap.cargolink.data.adapters;
 
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +16,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.ap.cargolink.R;
 import com.ap.cargolink.data.models.Order;
+import com.ap.cargolink.ui.fragments.ReviewFragment;
 import com.ap.cargolink.ui.fragments.ViewOffersFragment;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.List;
 
@@ -66,6 +73,42 @@ public class SenderOrdersAdapter extends RecyclerView.Adapter<SenderOrdersAdapte
                 Toast.makeText(v.getContext(), "No offers at the moment", Toast.LENGTH_SHORT).show();
             }
         });
+
+        if ("Delivered".equals(orderItem.getOrderStatus())) {
+            holder.reviewBtn.setOnClickListener(v -> {
+                DatabaseReference offersRef = FirebaseDatabase.getInstance().getReference("offers");
+                offersRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        for (DataSnapshot offerSnapshot : snapshot.getChildren()) {
+                            String orderId = offerSnapshot.child("orderId").getValue(String.class);
+                            String offerStatus = offerSnapshot.child("offerStatus").getValue(String.class);
+
+                            if (orderId != null && orderId.equals(orderItem.getOrderId()) && "Accepted".equals(offerStatus)) {
+                                String driverId = offerSnapshot.child("driverId").getValue(String.class);
+                                String offerId = offerSnapshot.getKey();
+
+                                openReviewFragment(driverId, orderItem.getOrderId(), offerId);
+                                return;
+                            }
+                        }
+                    }
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {}
+                });
+            });
+
+        } else {
+            holder.reviewBtn.setVisibility(View.GONE);
+        }
+    }
+
+    private void openReviewFragment(String driverId, String orderId, String offerId) {
+         ReviewFragment reviewFragment = ReviewFragment.newInstance(driverId, orderId, offerId);
+         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+         fragmentTransaction.replace(R.id.senderFrameLayout, reviewFragment);
+         fragmentTransaction.addToBackStack(null);
+         fragmentTransaction.commit();
     }
 
     @Override

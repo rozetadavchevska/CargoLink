@@ -1,7 +1,5 @@
 package com.ap.cargolink.ui.fragments;
 
-import static com.ap.cargolink.utils.NotificationReceiver.fetchUserTypeFromFirebase;
-
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -19,7 +17,6 @@ import android.widget.Toast;
 
 import com.ap.cargolink.R;
 import com.ap.cargolink.data.models.Offer;
-import com.ap.cargolink.ui.activities.DriverActivity;
 import com.ap.cargolink.ui.activities.SenderActivity;
 import com.ap.cargolink.utils.NotificationHelper;
 import com.google.firebase.auth.FirebaseAuth;

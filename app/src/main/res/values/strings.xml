@@ -50,6 +50,7 @@
     <string name="confirmDelivered">Confirm delivered</string>
     <string name="callReceiver">Call Receiver</string>
     <string name="review">Leave a review</string>
+    <string name="rating">Rating (1 to 5)</string>
 
     <string name="deliveryDate">Delivery date</string>
     <string name="deliveryPrice">Delivery price</string>
