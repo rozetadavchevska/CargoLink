@@ -30,15 +30,17 @@ public class NewOrderFragment extends Fragment {
     EditText receiverNumber;
     EditText orderWeight;
     EditText orderPrice;
+    FragmentManager fragmentManager;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_new_order, container, false);
 
+        fragmentManager = getParentFragmentManager();
+
         ImageButton back = view.findViewById(R.id.addOrderBack);
         back.setOnClickListener(v -> {
-            FragmentManager fragmentManager = getParentFragmentManager();
             fragmentManager.popBackStack();
         });
 
@@ -101,6 +103,7 @@ public class NewOrderFragment extends Fragment {
                     .addOnSuccessListener(v -> {
                         Toast.makeText(getContext(),"Successfully added order", Toast.LENGTH_SHORT).show();
                         updateSenderDatabase(currentUserId, orderId);
+                        fragmentManager.popBackStack();
                     })
                     .addOnFailureListener(v -> {
                         Toast.makeText(getContext(),"Problem adding order", Toast.LENGTH_SHORT).show();
